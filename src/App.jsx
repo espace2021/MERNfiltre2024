@@ -1,11 +1,18 @@
-import CardsArticles from "./components/CardsArticles"
+//import CardsArticles from "./components/CardsArticles"
+import MultiStepForm from "./components/FormWithSteps/MultiStepForm"
+
 function App() {
  
 
   return (
-    <>
-    <CardsArticles />
-    </>
+    <div className="container">
+    <div>
+
+
+    </div>
+    <MultiStepForm />
+   {/* <CardsArticles /> */} 
+    </div>
   )
 }
 
