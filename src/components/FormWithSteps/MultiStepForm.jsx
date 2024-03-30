@@ -10,9 +10,19 @@ import Step1 from "./Step1";
 
 import Step2 from "./Step2";
 
+import Complete from "./Complete";
+
+import Finish from './Finish';
+
 const steps = ['Details', 'Preferences', 'Complete'];
 
 export default function HorizontalLinearStepper() {
+
+  const [objectData, setObjectData] = React.useState({
+    name:"",email:"",password:"",password2:"",avatar:""
+  });
+
+  
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
 
@@ -24,7 +34,11 @@ export default function HorizontalLinearStepper() {
     return skipped.has(step);
   };
 
-  const handleNext = () => {
+  const handleNext = () => { 
+    const { name, email, password, password2 } = objectData;
+
+  // Perform validation here for all fields
+  if (name && name.length > 0 && email && email.length > 0 && password && password.length > 0 && password === password2 ) {
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -33,6 +47,8 @@ export default function HorizontalLinearStepper() {
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
+  }
+  else alert('Please fill in all fields then click submit before clicking next')
   };
 
   const handleBack = () => {
@@ -56,16 +72,19 @@ export default function HorizontalLinearStepper() {
 
   const handleReset = () => {
     setActiveStep(0);
+    setObjectData("")
   };
 
   const formContent = (step) => {
     switch(step) {
       case 0:
-        return <Step1 />;
+        return <Step1 objectData={objectData} setObjectData={setObjectData} />;
       case 1:
         return <Step2 />;
       case 2:
-        return "";
+        return <Complete objectData={objectData} /> ;
+      case 3:
+        return <Finish objectData={objectData} /> ;
       default:
         return <div>404: Not Found</div>
     }
