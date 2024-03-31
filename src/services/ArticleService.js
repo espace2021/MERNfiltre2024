@@ -25,7 +25,7 @@ export const fetchArticlesPagination=async(page,limit)=> {
 export const fetchArticlesPaginationFilter=async(page,limit,searchTerm,prixMax)=> { 
     return  await Api.get(`${ARTICLE_API}/paginationFilter?page=${page}&limit=${limit}&searchTerm=${searchTerm}&prixMax=${prixMax}`)
     } 
-    
+        
 export const fetchArticlesByCateg=async(categorieID)=> { 
     return  await Api.get(ARTICLE_API + '/cat/' + categorieID)
    } 

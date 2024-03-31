@@ -24,7 +24,7 @@ const CardsArticles= ()=> {
   //le filtre catégorie
     const [categorieID, setCategorieID] = React.useState('');
   
-    const handleChangePage = (event, newPage) => {
+    const handleChangePage = (event, newPage) => { 
         setPage(newPage);
       };
     
