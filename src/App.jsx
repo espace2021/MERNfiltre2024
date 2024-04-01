@@ -7,6 +7,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 
+import SuccessPayment from './client/successPayment'
+
 function App() {
  
 
@@ -25,6 +27,7 @@ function App() {
        <Route path="/" element={<Listarticles/>}/>
        <Route path="/articlesclient" element={<Listarticles/>}/>
         <Route path="/cart" element={<Cart/>}/>
+        <Route path="/successPayment" element={<SuccessPayment/>}/>
       </Routes>
       </Router>
     

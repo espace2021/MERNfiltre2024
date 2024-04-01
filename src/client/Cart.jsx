@@ -1,7 +1,14 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { clearCart, removeFromCart, plusCart, minusCart } from '../features/cartSlice'; 
-import React,{useEffect,useCallback} from 'react'
+import React,{useCallback,useState,useEffect} from 'react'
 import { Link } from "react-router-dom";
+
+import Api from "../axios/Api";
+import { loadStripe } from '@stripe/stripe-js';
+
+import { googleLogout, useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
+
 function Cart() {
     
   const cart = useSelector((state) => state.storecart.cart);
@@ -11,20 +18,85 @@ function Cart() {
   const handleAddToCart = useCallback((product) => {
     dispatch(plusCart(product));
     }, [dispatch])
-    const handleDecreaseCart = useCallback((product) => {
+  const handleDecreaseCart = useCallback((product) => {
     dispatch(minusCart(product));
     }, [dispatch])
-    const handleRemoveFromCart = useCallback((product) => {
+  const handleRemoveFromCart = useCallback((product) => {
     
     dispatch(removeFromCart(product));
     }, [dispatch])
-    const handleClearCart = useCallback(() => {
+  const handleClearCart = useCallback(() => {
     dispatch(clearCart());
     }, [dispatch])
+   
+  const [status, setStatus] = useState("idle");
+  async function handleClickStripe(event,name,email) {
+      
+      event.preventDefault();
+      alert(name)
+      alert(email)
+      if (cartTotal > 0) {
+        setStatus("loading");
+        try {
+          const stripe = await loadStripe("pk_test_51KtYRUD3HS4vNAwatvmqAEXLKKX11UOcpkHfLnw9UPI9kZ7AJCOeLkqik61wHFXLmRGHUd4aNBvp45v82DpskKl300bMfznwlE");
+
+          if (!stripe) throw new Error('Stripe failed to initialize.');
+     
+          const checkoutResponse = await Api.post('payment', {cart})
+          const {sessionId} = await checkoutResponse.data;
+          const stripeError = await stripe.redirectToCheckout({sessionId});
+
+          if (stripeError) {
+              console.error(stripeError);
+          }
+  
+         } catch (error) {
+          console.error(error);
+          setStatus("redirect-error");
+        }
+      } else {
+        setStatus("no-items");
+      }
+    }
+
+    const [ user, setUser ] = useState([]);
+    const [ profile, setProfile ] = useState([]);
+
+    const login = useGoogleLogin({
+        onSuccess: (codeResponse) => setUser(codeResponse),
+        onError: (error) => console.log('Login Failed:', error)
+    });
+
+    useEffect(
+        () => {
+            if (user) {
+                axios
+                    .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+                        headers: {
+                            Authorization: `Bearer ${user.access_token}`,
+                            Accept: 'application/json'
+                        }
+                    })
+                    .then((res) => {
+                        setProfile(res.data);
+                    })
+                    .catch((err) => console.log(err));
+            }
+        },
+        [ user ]
+    );
+
+    // log out function to log the user out of google and set the profile array to null
+    const logOut = () => {
+        googleLogout();
+        setProfile(null);
+    };
+
     return (
     <div className="cart-container">
-        
+         
     <h2>Shopping Cart</h2>
+  
     {cart.length === 0 ? (
     <div className="cart-empty">
     <p>Panier Vide</p>
@@ -81,8 +153,22 @@ function Cart() {
     <span className="amount">{cartTotal}
     TND</span>
     </div>
-    <p>Taxes and shipping calculated at checkout</p>
-    <button>Check out</button>
+    
+    {profile && profile.name ? (
+                <div>
+                    <img src={profile.picture} alt="user image" />
+                    <h3>User Logged in</h3>
+                    <p>Name: {profile.name}</p>
+                    <p>Email Address: {profile.email}</p>
+                    <br />
+                    <br />
+                    <button onClick={logOut}>Log out</button>
+                    <p>Taxes and shipping calculated at checkout</p>
+    <button onClick={(event)=>handleClickStripe(event,profile.name,profile.email)}>{status !== "loading" ? "Check Out" : "Loading..."}</button>
+                </div>
+            ) : (
+                <button onClick={login}>Check Out Sign in Google 🚀</button>
+            )}
     <div className="continue-shopping">
     <Link to="/articlesclient">
     <span>Continue Shopping</span>
