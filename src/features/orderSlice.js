@@ -27,19 +27,19 @@ export const orderSlice = createSlice({
   extraReducers: (builder) => {
     builder
    
-    //getOrders
-    .addCase(getOrders.pending,(state,action)=>{
+    //createOrder
+    .addCase(createOrder.pending,(state,action)=>{
       state.isLoading=true;
       state.error=null;
      
     })
-    .addCase(getOrders.fulfilled,(state, action) => {
+    .addCase(createOrder.fulfilled,(state, action) => {
       state.isLoading=false;
       state.error = null;
       state.orders=action.payload;
      
     })
-    .addCase(getOrders.rejected, (state, action) => {
+    .addCase(createOrder.rejected, (state, action) => {
       state.isLoading=false;
       state.error=action.payload;
    

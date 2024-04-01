@@ -4,6 +4,8 @@ import scategoriesReducer from "../features/scategorieSlice"
 import cartsliceReducer from "../features/cartSlice"
 import categoriesReducer from "../features/categorieSlice"
 
+import ordersReducer from "../features/orderSlice"
+
 import {persistReducer, FLUSH,
     REHYDRATE,
     PAUSE,
@@ -26,6 +28,7 @@ storearticles:articlesReducer,
 storescategories: scategoriesReducer,
 storecart:persistedReducer,
 storecategories : categoriesReducer,
+storeorders : ordersReducer,
 },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

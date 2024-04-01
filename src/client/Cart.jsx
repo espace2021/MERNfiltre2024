@@ -9,6 +9,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 
+import {createOrder} from '../features/orderSlice'
+
 function Cart() {
     
   const cart = useSelector((state) => state.storecart.cart);
@@ -33,8 +35,7 @@ function Cart() {
   async function handleClickStripe(event,name,email) {
       
       event.preventDefault();
-      alert(name)
-      alert(email)
+      addOrder(name,email)
       if (cartTotal > 0) {
         setStatus("loading");
         try {
@@ -91,6 +92,22 @@ function Cart() {
         googleLogout();
         setProfile(null);
     };
+
+const addOrder=(name,email)=>{
+  const lineOrder= cart.map((lc) => ({
+    articleID: lc.id,
+    quantity: lc.qty,
+    totalPrice: lc.prix*lc.qty
+  }));
+  const objectOrder ={
+    "client": name +"-"+email,
+    "status":"Not processed",
+    "lineOrder": lineOrder
+  }
+   
+  dispatch(createOrder(objectOrder))
+
+}
 
     return (
     <div className="cart-container">
