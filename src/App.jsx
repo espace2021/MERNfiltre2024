@@ -9,6 +9,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 
 import SuccessPayment from './client/successPayment'
 
+import ListOrders from './admin/orders/ListOrders'
+
 function App() {
  
 
@@ -28,6 +30,7 @@ function App() {
        <Route path="/articlesclient" element={<Listarticles/>}/>
         <Route path="/cart" element={<Cart/>}/>
         <Route path="/successPayment" element={<SuccessPayment/>}/>
+        <Route path="/admin/orders" element={<ListOrders/>}/>
       </Routes>
       </Router>
     

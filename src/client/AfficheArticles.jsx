@@ -17,6 +17,7 @@ const AfficheArticles = () => {
   const dispatch = useDispatch();
  
   const {articles,isLoading,error} = useSelector((state)=>state.storearticles);
+
   const handleAddToCart = (art) => {
         const obj={
           _id:art._id,

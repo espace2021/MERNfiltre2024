@@ -95,7 +95,7 @@ function Cart() {
 
 const addOrder=(name,email)=>{
   const lineOrder= cart.map((lc) => ({
-    articleID: lc.id,
+    articleID: lc._id,
     quantity: lc.qty,
     totalPrice: lc.prix*lc.qty
   }));

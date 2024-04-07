@@ -60,7 +60,9 @@ router.get('/', async (req, res, )=> {
         return res.status(404).json({ message: 'Order not found' });
       }
   
-      res.status(200).json(orderUpdated);
+      const order = await Order.findById(orderId).populate("lineOrder.articleID").exec();
+    
+      res.status(200).json(order);
     } catch (error) {
       res.status(404).json({ message: error.message });
     }

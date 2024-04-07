@@ -17,29 +17,42 @@ export const addOrder = async (objectOrder) => {
 };
 
 
-export const fetchOrders=async()=> { 
-    const res = await fetch(process.env.API_URL+ORDER_API, { cache: 'no-store' })
-    const response=await res.json()
-    return response;
+export const fetchOrders = async () => {
+    try {
+      const response = await Api.get(`${ORDER_API}`, {
+        headers: {
+          'Cache-Control': 'no-store'
+        }
+      });
+        return response.data;
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      throw error;
     }
+  };
 
-export const updateOrder=async(id,status) =>{
-        const res = await fetch(process.env.API_URL+ORDER_API+`${id}`, {
-            method: 'PUT',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({"status":status}),
-        });
-        const response = await res.json();
-        return response;
+export const updateOrder = async (id, status) => {
+    try {
+      const response = await Api.put(`${ORDER_API}/${id}`, {
+        status: status
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error updating order:', error);
+      throw error;
     }
+  };
 
-export const deleteOrder=async(id) =>{
-        const res = await fetch(process.env.API_URL+ORDER_API+`${id}`,{
-            method: 'DELETE'
-        });
-        const response = await res.json();
-        return response;
-    
+  export const deleteOrder = async (id) => {
+    try {
+      const response = await Api.delete(`${ORDER_API}/${id}`);
+       return response.data;
+    } catch (error) {
+      console.error('Error deleting order:', error);
+      throw error;
     }
+  };
