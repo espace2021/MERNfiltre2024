@@ -18,7 +18,11 @@ function Cart() {
   const dispatch = useDispatch();
 
   const handleAddToCart = useCallback((product) => {
-    dispatch(plusCart(product));
+    console.log(product.qtestock)
+    if(product.qtestock>product.qty)
+      dispatch(plusCart(product));
+    else
+     alert("Not Enough quantity in stock")
     }, [dispatch])
   const handleDecreaseCart = useCallback((product) => {
     dispatch(minusCart(product));

@@ -142,7 +142,7 @@ export const categorieSlice = createSlice({
         ); 
       state.isLoading=false;
       state.error=null; 
-      state.success=action.payload;
+      state.success=true;
          })
     //deleteCategorie
     .addCase(deleteCategorie.pending, (state, action) => {

@@ -113,7 +113,7 @@ export const orderSlice = createSlice({
           state.success=null;  
         })
         .addCase(updateOrders.fulfilled, (state, action) => {
-          console.log(action.payload)
+          
           state.orders = state.orders.map((item) =>
               item._id === action.payload._id ? action.payload : item
             ); 

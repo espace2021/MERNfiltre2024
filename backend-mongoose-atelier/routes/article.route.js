@@ -163,7 +163,7 @@ router.get('/cat/:categorieID', async (req, res) => {
 
   // modifier quantité seulement
 
-  router.put('/qty/:id', async (req, res) => { console.log(req.body)
+  router.put('/qty/:id', async (req, res) => { 
     const qty = req.body.quantity||0;
     const articleId=req.params.id||null;
 
@@ -180,7 +180,8 @@ router.get('/cat/:categorieID', async (req, res) => {
          return res.status(404).json({ message: 'Product not found' });
        }
    
-       res.status(200).json(articleUpdated);
+       const art = await Article.findById(articleId).populate("scategorieID").exec();
+       res.status(200).json(art);
      } catch (error) {
        res.status(404).json({ message: error.message });
      }

@@ -33,3 +33,25 @@ export const fetchArticlesByCateg=async(categorieID)=> {
 export const fetchArticlesPaginationFilterCateg=async(page,limit,searchTerm,prixMax,categorieID)=> { 
     return  await Api.get(`${ARTICLE_API}/paginationFilterWithCateg/${categorieID}?page=${page}&limit=${limit}&searchTerm=${searchTerm}&prixMax=${prixMax}`)
     } 
+
+export const updateQuantity = async (lineOrder) => {
+        const path = "qty/";
+        let result = [];
+        //La fonction Promise.all() est utilisée pour attendre que toutes les requêtes se terminent simultanément.
+        await Promise.all(lineOrder.map(async (line) => {
+            try {
+                const response = await Api.put(`${ARTICLE_API}/${path}${line.articleID._id}`, {
+                    quantity: line.quantity
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                result.push(response.data);
+            } catch (error) {
+                console.error("Error updating quantity:", error);
+            }
+        }));
+    
+        return result;
+    }

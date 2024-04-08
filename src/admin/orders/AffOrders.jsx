@@ -4,6 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch,useSelector} from "react-redux";
 
 import {updateOrders,deleteOrders} from "../../features/orderSlice";
+import {updateArticleQty} from "../../features/articleSlice";
 
 const AffOrders = () => {
 
@@ -13,9 +14,13 @@ const AffOrders = () => {
 
   const onChangeInput = (e, _id) => { 
     const {  value } = e.target
-
+    
     const order={_id , status:value}
-    dispatch(updateOrders(order))
+    dispatch(updateOrders(order)) ; 
+    const result = orders.filter((item) => item._id===_id);   
+    if (value==='Delivered') {
+    dispatch(updateArticleQty(result[0].lineOrder))
+  }
   }
 
 const statusColors = {
