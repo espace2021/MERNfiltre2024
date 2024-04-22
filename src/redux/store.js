@@ -1,10 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
+
 import articlesReducer from "../features/articleSlice"
 import scategoriesReducer from "../features/scategorieSlice"
 import cartsliceReducer from "../features/cartSlice"
 import categoriesReducer from "../features/categorieSlice"
 
 import ordersReducer from "../features/orderSlice"
+
+import authReducer from "../features/AuthSlice"
 
 import {persistReducer, FLUSH,
     REHYDRATE,
@@ -22,6 +25,8 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, cartsliceReducer)
 
+const persistedReducerAuth = persistReducer(persistConfig, authReducer)
+
 const store = configureStore({
 reducer: {
 storearticles:articlesReducer,
@@ -29,6 +34,7 @@ storescategories: scategoriesReducer,
 storecart:persistedReducer,
 storecategories : categoriesReducer,
 storeorders : ordersReducer,
+auth:persistedReducerAuth
 },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
