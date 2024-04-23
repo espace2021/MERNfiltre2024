@@ -48,8 +48,7 @@ const[password,setPassword]=useState('');
     if (isSuccess && user) { 
         if(user.role==="admin") navigate('/dashboard');
      else { 
-        //  alert(errorMessage)
-          navigate('/')}
+              navigate('/')}
       }
   }, [ navigate,isSuccess, user])
 

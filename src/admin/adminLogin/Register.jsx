@@ -33,8 +33,7 @@ const theme = createTheme();
 export default function Register() {
   const navigate = useNavigate()
   const dispatch = useDispatch();
-  const [firstName,setFirstName]=useState("")
-  const [lastName,setLastName]=useState("")
+  const [name,setName]=useState("")
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
@@ -48,10 +47,10 @@ const handleSubmit = (e) => {
         alert('Passwords do not match')
 } else {
         const userData = {
-        firstname:firstName,
-        lastname:lastName,
+        name:name,
         email:email,
         password:password,
+        role:'user',
         avatar:avatar
         }
 
@@ -83,29 +82,19 @@ const handleSubmit = (e) => {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="name"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id="name"
+                  label="Name"
                   autoFocus
-                  onChange={(event)=>setFirstName(event.target.value)}
+                  onChange={(event)=>setName(event.target.value)}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                  onChange={(event)=>setLastName(event.target.value)}
-                />
-              </Grid>
+             
               <Grid item xs={12}>
                 <TextField
                   required
