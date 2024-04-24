@@ -22,8 +22,7 @@ export const login = createAsyncThunk(
         const {rejectWithValue} = thunkAPI;
     try {
     const res = await signin(user); 
-       
-    return res.data ;
+     return res.data ;
     } 
     catch (error) { console.log(error.response)
         
@@ -44,7 +43,7 @@ export const authSlice = createSlice({
     isError: false,
     errMsg: null,
     isLoggedIn:false,
-  
+    isActive:false
     
 },
 
@@ -55,6 +54,7 @@ reducers: {
         state.isError=false
         state.errorMessage=""
         state.isLoggedIn=false
+        state.isActive=false
         }
     },
     extraReducers: (builder) => {
@@ -97,11 +97,17 @@ reducers: {
         localStorage.setItem('refresh_token', action.payload.refreshToken);
         state.isSuccess=action.payload.success
         state.isError=false
+        state.isActive=action.payload.isActive 
         state.errorMessage=null
-       MySwal.fire({
+        if(state.isActive){ MySwal.fire({
             icon: 'success',
             title: 'Connection was successful',
             })
+        }
+        else{ MySwal.fire({
+            icon: 'error',
+            title: "Account hasn't been activated yet"
+        })}
         })
     .addCase(login.rejected, (state, action) => { console.log(action)
         state.isLoggedIn = false;

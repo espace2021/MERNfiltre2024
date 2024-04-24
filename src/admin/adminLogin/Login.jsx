@@ -16,8 +16,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-
-
 function Copyright(props) {
 
   return (
@@ -38,19 +36,18 @@ export default function Login() {
   const navigate = useNavigate();
 const dispatch = useDispatch();
 
-const {isSuccess,user,errorMessage} = useSelector((state) =>state.auth);
+const {isSuccess,user,isActive} = useSelector((state) =>state.auth);
 
 const[email,setEmail]=useState('');
 const[password,setPassword]=useState('');
 
- 
-  useEffect(() => {
-    if (isSuccess && user) { 
+   useEffect(() => { 
+    if (isSuccess && user && isActive) { 
         if(user.role==="admin") navigate('/dashboard');
-     else { 
+        else { 
               navigate('/')}
       }
-  }, [ navigate,isSuccess, user])
+  }, [ navigate,isSuccess, user,isActive])
 
 const handleSubmit=(event)=>{
 event.preventDefault();

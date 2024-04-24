@@ -96,12 +96,11 @@ transporter.sendMail(mailOption,function(error,info){
 *************************************************************** 
 */
 
-
 router.get('/status/edit', async (req, res) => {
   try {
   let email = req.query.email
   let user = await User.findOne({email})
-  
+
   let userActivated = await UserActivation.findOne({userID :user._id})
   
   userActivated.isActive = !userActivated.isActive
@@ -129,12 +128,12 @@ router.get('/status/edit', async (req, res) => {
     }
    })
 
-
-  
+ 
 /*
 *************************************************************** 
 */
 // fin traitement node mailer
+
 
 //Generate Token 
 const generateToken=(user) =>{
@@ -164,11 +163,15 @@ router.post('/login', async (req, res) =>  {
        const token = generateToken(user);
        const refreshToken = generateRefreshToken(user);
 
+       // retour de l’état de l’activation du compte
+       let userActivated = await UserActivation.findOne({userID :user._id})
+                  
        res.status(200).json({ 
         success: true, 
         token,
         refreshToken,
-        user
+        user,
+        isActive :userActivated.isActive
     })
    }
  } catch (error) {
