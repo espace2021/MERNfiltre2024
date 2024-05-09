@@ -25,7 +25,7 @@ const Success = () => {
         setNomClient(data.nomClient);
         setEmailClient(data.emailClient);
         localStorage.removeItem("sessionId")
-        addOrder(data.nomClient,data.emailClient)
+        if (data.nomClient) addOrder(data.nomClient,data.emailClient)
     })
     .catch(error => console.error('Erreur lors de la récupération des détails de la transaction:', error));
     

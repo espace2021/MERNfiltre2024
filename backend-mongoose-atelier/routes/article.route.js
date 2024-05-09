@@ -6,7 +6,7 @@ const Scategorie =require("../models/scategorie")
 // modifier quantité seulement
 
 router.put('/qty/:id', async (req, res) => {  console.log(req.body.quantity);console.log(req.params.id)
-    const qty = req.body.quantity||0;
+   const qty = req.body.quantity||0;
     const articleId=req.params.id||null;
 
     const oldArticle=await Article.findById(articleId)
@@ -29,6 +29,7 @@ router.put('/qty/:id', async (req, res) => {  console.log(req.body.quantity);con
      } catch (error) {
        res.status(404).json({ message: error.message });
      }
+   
    });
 // afficher la liste des articles.
 
