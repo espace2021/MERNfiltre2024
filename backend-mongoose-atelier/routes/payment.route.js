@@ -25,11 +25,40 @@ router.post('/', async (req, res) => {
           success_url: `${process.env.CLIENT_URL}`,
           cancel_url: `${process.env.CLIENT_URL}`,
         })
-      
+    
+
           res.json({ sessionId: session.id })
       } catch (e) {
         res.status(500).json({ error: e.message })
       }
   });
+
+ 
+
+router.get('/recuperer-details-transaction/:sessionID', async (req, res) => {
+ 
+    try {
+            
+   /*   const pi = await Stripe.paymentIntents.list({
+        limit: 1,
+      });
+    console.log(pi.data[0].id)
+        const paymentIntent = await Stripe.paymentIntents.retrieve(pi.data[0].id);
+        const emailClient =paymentIntent.receipt_email
+*/
+        const sessionID=req.params.sessionID
+        
+        const session = await Stripe.checkout.sessions.retrieve(
+          sessionID
+        );
+        const nomClient = session.customer_details.name;
+        const emailClient = session.customer_details.email;
+
+        res.json({nomClient, emailClient });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 
 module.exports = router;

@@ -18,6 +18,7 @@ import ForgotPassword from './admin/adminLogin/ForgotPassword'
 import ResetPassword from './admin/adminLogin/ResetPassword'
 import Dashboard from "./admin/adminLogin/dashboard";
 
+import AddArticle from './admin/articles/addArticle'
 function App() {
  
 
@@ -46,6 +47,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset_password/:id/:token" element={<ResetPassword />} />
         <Route path="/dashboard"  element={<Dashboard/>}/>    
+        <Route path="/addArticle"  element={<AddArticle/>}/> 
 
       </Routes>
       </Router>

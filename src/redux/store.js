@@ -9,7 +9,8 @@ import ordersReducer from "../features/orderSlice"
 
 import authReducer from "../features/AuthSlice"
 
-import {persistReducer, FLUSH,
+import {persistReducer,persistStore,
+    FLUSH,
     REHYDRATE,
     PAUSE,
     PERSIST,
@@ -43,4 +44,6 @@ auth:persistedReducerAuth
       },
     })
 })
-export default store
+
+export const persistor = persistStore(store);
+export default store;

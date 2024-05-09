@@ -3,6 +3,33 @@ const router = express.Router();
 const Article=require("../models/article")
 const Scategorie =require("../models/scategorie")
 
+// modifier quantité seulement
+
+router.put('/qty/:id', async (req, res) => {  console.log(req.body.quantity);console.log(req.params.id)
+    const qty = req.body.quantity||0;
+    const articleId=req.params.id||null;
+
+    const oldArticle=await Article.findById(articleId)
+    console.log(oldArticle.qtestock)
+   
+     try {
+       const articleUpdated = await Article.findByIdAndUpdate(
+         articleId,
+         { qtestock: oldArticle.qtestock - qty},
+         { new: true } // Return the updated document
+       );
+   
+       if (!articleUpdated) {
+         return res.status(404).json({ message: 'Product not found' });
+       }
+   
+       const art = await Article.findById(articleId).populate("scategorieID").exec();
+       console.log(art)
+       res.status(200).json(art);
+     } catch (error) {
+       res.status(404).json({ message: error.message });
+     }
+   });
 // afficher la liste des articles.
 
 router.get('/', async (req, res, )=> {
@@ -161,31 +188,7 @@ router.get('/cat/:categorieID', async (req, res) => {
     }
 });
 
-  // modifier quantité seulement
-
-  router.put('/qty/:id', async (req, res) => { 
-    const qty = req.body.quantity||0;
-    const articleId=req.params.id||null;
-
-    const oldArticle=await Article.findById(articleId)
-   
-     try {
-       const articleUpdated = await Article.findByIdAndUpdate(
-         articleId,
-         { qtestock: oldArticle.qtestock - qty},
-         { new: true } // Return the updated document
-       );
-   
-       if (!articleUpdated) {
-         return res.status(404).json({ message: 'Product not found' });
-       }
-   
-       const art = await Article.findById(articleId).populate("scategorieID").exec();
-       res.status(200).json(art);
-     } catch (error) {
-       res.status(404).json({ message: error.message });
-     }
-   });
+  
 
    // afficher la liste des articles par page avec filtres et par catégorie
    router.get('/paginationFilterWithCateg/:categorieID', async (req, res) => { 

@@ -9,7 +9,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 
-import {createOrder} from '../features/orderSlice'
+
+
 
 function Cart() {
     
@@ -18,19 +19,20 @@ function Cart() {
   const dispatch = useDispatch();
 
   const handleAddToCart = useCallback((product) => {
-    console.log(product.qtestock)
-    if(product.qtestock>product.qty)
+      if(product.qtestock>product.qty)
       dispatch(plusCart(product));
     else
      alert("Not Enough quantity in stock")
     }, [dispatch])
+
   const handleDecreaseCart = useCallback((product) => {
     dispatch(minusCart(product));
     }, [dispatch])
+
   const handleRemoveFromCart = useCallback((product) => {
-    
-    dispatch(removeFromCart(product));
+     dispatch(removeFromCart(product));
     }, [dispatch])
+
   const handleClearCart = useCallback(() => {
     dispatch(clearCart());
     }, [dispatch])
@@ -39,7 +41,7 @@ function Cart() {
   async function handleClickStripe(event,name,email) {
       
       event.preventDefault();
-      addOrder(name,email)
+    
       if (cartTotal > 0) {
         setStatus("loading");
         try {
@@ -47,8 +49,12 @@ function Cart() {
 
           if (!stripe) throw new Error('Stripe failed to initialize.');
      
-          const checkoutResponse = await Api.post('payment', {cart})
+          const checkoutResponse = await Api.post('payment', {cart,cartTotal})
+         
           const {sessionId} = await checkoutResponse.data;
+          
+         localStorage.setItem("sessionId",sessionId)
+  
           const stripeError = await stripe.redirectToCheckout({sessionId});
 
           if (stripeError) {
@@ -84,6 +90,8 @@ function Cart() {
                     })
                     .then((res) => {
                         setProfile(res.data);
+                        localStorage.setItem("profileName",res.data.name)
+                        localStorage.setItem("profileEmail",res.data.email)
                     })
                     .catch((err) => console.log(err));
             }
@@ -95,23 +103,10 @@ function Cart() {
     const logOut = () => {
         googleLogout();
         setProfile(null);
+        localStorage.removeItem("profile")
     };
 
-const addOrder=(name,email)=>{
-  const lineOrder= cart.map((lc) => ({
-    articleID: lc._id,
-    quantity: lc.qty,
-    totalPrice: lc.prix*lc.qty
-  }));
-  const objectOrder ={
-    "client": name +"-"+email,
-    "status":"Not processed",
-    "lineOrder": lineOrder
-  }
-   
-  dispatch(createOrder(objectOrder))
 
-}
 
     return (
     <div className="cart-container">
@@ -183,7 +178,7 @@ const addOrder=(name,email)=>{
                     <p>Email Address: {profile.email}</p>
                     <br />
                     <br />
-                    <button onClick={logOut}>Log out</button>
+                    <button onClick={() => logOut()}>Log out</button>
                     <p>Taxes and shipping calculated at checkout</p>
     <button onClick={(event)=>handleClickStripe(event,profile.name,profile.email)}>{status !== "loading" ? "Check Out" : "Loading..."}</button>
                 </div>

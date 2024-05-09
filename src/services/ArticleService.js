@@ -38,7 +38,9 @@ export const updateQuantity = async (lineOrder) => {
         const path = "qty/";
         let result = [];
         //La fonction Promise.all() est utilisée pour attendre que toutes les requêtes se terminent simultanément.
-        await Promise.all(lineOrder.map(async (line) => {
+        await Promise.all(lineOrder.map(async (line) => { 
+            const id = line.articleID._id?line.articleID._id:line.articleID
+            console.log(line.quantity)
             try {
                 const response = await Api.put(`${ARTICLE_API}/${path}${line.articleID._id}`, {
                     quantity: line.quantity
