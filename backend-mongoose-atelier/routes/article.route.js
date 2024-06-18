@@ -3,6 +3,51 @@ const router = express.Router();
 const Article=require("../models/article")
 const Scategorie =require("../models/scategorie")
 
+  
+// recherche article par scat avec tensorflow en front ReactJS
+router.get('/getArticlesByScat', async (req, res) => { 
+    console.log(req.query)
+        try {
+          
+            let  query  = req.url;
+      
+        if (!query) {
+          return res.json({ error: 'Query parameter is required' });
+        }
+      
+        // Décoder les caractères spéciaux de l'URL
+      query = decodeURIComponent(query);
+    
+      // Supprimer les espaces de la chaîne de requête
+      query = query.replace(/\s+/g, '');
+    
+      // Extraire les mots clés de la chaîne de requête
+      const fragmentSearch=query.split('=');
+      console.log(fragmentSearch)
+        const searchQueries = fragmentSearch[1].split(',');
+        console.log(searchQueries)
+        try {
+         // Recherche des spécialités correspondant aux searchQueries
+        const scategories = await Scategorie.find({ nomscategorie: { $in: searchQueries } }).exec();
+        
+        // Récupération des IDs des spécialités trouvées
+        const scategorieIds = scategories.map(scategorie => scategorie._id);
+    
+        // Recherche des articles dont les spécialités correspondent aux IDs trouvés
+        const articles = await Article.find({ scategorieID: { $in: scategorieIds } }).exec();
+        
+          return res.json(articles);
+          
+        } catch (error) {
+          console.error('Error fetching products:', error);
+          return res.json({ error: 'Internal Server Error' });
+        }
+        } catch (error) {
+            return res.json({ error : error });
+        }
+    
+    });
+    
 // modifier quantité seulement
 
 router.put('/qty/:id', async (req, res) => {  console.log(req.body.quantity);console.log(req.params.id)
@@ -242,6 +287,5 @@ router.get('/cat/:categorieID', async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 });
-   
-
+ 
 module.exports = router;

@@ -18,7 +18,16 @@ import ForgotPassword from './admin/adminLogin/ForgotPassword'
 import ResetPassword from './admin/adminLogin/ResetPassword'
 import Dashboard from "./admin/adminLogin/dashboard";
 
-import AddArticle from './admin/articles/addArticle'
+import AddArticle from './admin/articles/addArticle';
+
+import Chatbot  from './discussion/Chatbot'
+
+import AiSistaVoice from './voice/aiSistaVoice'
+
+import UploadImages from './tensorflow/uploadImages'
+
+import VisualSearch from './tensorflow/visualSearch'
+
 function App() {
  
 
@@ -27,8 +36,8 @@ function App() {
        <ToastContainer/>
        <Router>
        <div>
-
-
+      <Chatbot />
+      <AiSistaVoice />
 </div>
 {/* <MultiStepForm /> */} 
 {/* <CardsArticles /> */} 
@@ -49,6 +58,8 @@ function App() {
         <Route path="/dashboard"  element={<Dashboard/>}/>    
         <Route path="/addArticle"  element={<AddArticle/>}/> 
 
+        <Route path="/uploadImages"  element={<UploadImages/>}/> 
+        <Route path="/visualSearch"  element={<VisualSearch/>}/> 
       </Routes>
       </Router>
     
